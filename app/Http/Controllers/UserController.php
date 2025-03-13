@@ -138,10 +138,11 @@ class UserController extends Controller
         //     dd($user->wasChanged(['nama', 'username'])); // true
         // }
 
-        public function index(){
-            $user =UserModel::all();
-            return view('user', ['data' => $user]);
-        }
+
+        // public function index(){
+        //     $user =UserModel::all();
+        //     return view('user', ['data' => $user]);
+        // }
     
         public function tambah() {
             return view('user_tambah');
@@ -181,4 +182,15 @@ class UserController extends Controller
 
             return redirect('/user');
         }
+
+        // public function index(){
+        //     $user =UserModel::with('level')->get();
+        //     dd($user);
+        // }
+
+        public function index(){
+            $user =UserModel::with('level')->get();
+            return view('user', ['data' => $user]);
+    }
+    
 }
