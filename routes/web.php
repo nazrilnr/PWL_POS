@@ -3,6 +3,7 @@
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WelcomeController;
 use Database\Seeders\KategoriSeeder;
 use Illuminate\Support\Facades\Route;
 
@@ -17,9 +18,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Route::get('/level', [LevelController::class, 'index']);
 Route::get('/kategori', [KategoriController::class, 'index']);
@@ -32,3 +33,6 @@ Route::get('/user', [UserController::class, 'index'])->name('/user');
 
 Route::post('/user/tambah_simpan', [UserController::class, 'tambah_simpan'])->name('/user/tambah_simpan');
 Route::put('/user/ubah_simpan/{id}', [UserController::class, 'ubah_simpan'])->name('/user/ubah_simpan');
+
+
+Route::get('/', [WelcomeController::class, 'index']);
