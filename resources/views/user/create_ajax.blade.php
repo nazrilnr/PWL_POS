@@ -4,8 +4,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Tambah Data User</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
@@ -20,17 +21,17 @@
                 </div>
                 <div class="form-group">
                     <label>Username</label>
-                    <input value="" type="text" name="username" id="username" class="form-control" required>
+                    <input type="text" name="username" id="username" class="form-control" required>
                     <small id="error-username" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Nama</label>
-                    <input value="" type="text" name="nama" id="nama" class="form-control" required>
+                    <input type="text" name="nama" id="nama" class="form-control" required>
                     <small id="error-nama" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input value="" type="password" name="password" id="password" class="form-control" required>
+                    <input type="password" name="password" id="password" class="form-control" required>
                     <small id="error-password" class="error-text form-text text-danger"></small>
                 </div>
             </div>
@@ -41,6 +42,7 @@
         </div>
     </div>
 </form>
+
 <script>
     $(document).ready(function () {
         $("#form-tambah").validate({
@@ -57,12 +59,19 @@
                     data: $(form).serialize(),
                     success: function (response) {
                         if (response.status) {
-                            $('#myModal').modal('hide');
+                            $('#myModal').modal('hide'); // tutup modal
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Berhasil',
                                 text: response.message
                             });
+
+                            // ✅ Reset form dan bersihkan error
+                            $('#form-tambah')[0].reset();
+                            $('.error-text').text('');
+                            $('.is-invalid').removeClass('is-invalid');
+
+                            // ✅ Reload data tabel
                             dataUser.ajax.reload();
                         } else {
                             $('.error-text').text('');
@@ -91,5 +100,5 @@
                 $(element).removeClass('is-invalid');
             }
         });
-    }); 
+    });
 </script>
