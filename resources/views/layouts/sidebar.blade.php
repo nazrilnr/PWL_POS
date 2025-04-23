@@ -66,6 +66,14 @@
                 <p>Transaksi Penjualan</p>
             </a>
         </li>
+
+        <li class="nav-header">Data Penjualan</li>
+        <li class="nav-item">
+            <a href="{{ url('/penjualan-detail') }}" class="nav-link {{ $activeMenu == 'penjualan-detail' ? 'active' : '' }}">
+                <i class="nav-icon fas fa-shipping-fast"></i>
+                <p>Detail Penjualan</p>
+            </a>
+        </li>
             
         </ul>
     </nav>
