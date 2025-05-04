@@ -159,3 +159,20 @@ Route::group(['prefix' => 'penjualan-detail'], function () {
     Route::middleware(['auth'])->group(function () {
         // Masukkan semua route yang perlu autentikasi di sini
     });
+
+    Route::middleware(['auth'])->group(function() {
+        // Artinya semua route di dalam group ini harus login dulu
+        Route::get('/', [WelcomeController::class, 'index']);
+        
+        // Route Level - Artinya semua route di dalam group ini harus punya role ADM (Administrator)
+        Route::middleware(['authorize:ADM'])->group(function() {
+            Route::get('/level', [LevelController::class, 'index']);
+            Route::post('/level/list', [LevelController::class, 'list']); // Untuk list JSON datatables
+            Route::get('/level/create', [LevelController::class, 'create']);
+            Route::post('/level', [LevelController::class, 'store']);
+            Route::get('/level/{id}/edit', [LevelController::class, 'edit']); // Untuk tampilkan form edit
+            Route::put('/level/{id}', [LevelController::class, 'update']); // Untuk proses update data
+            Route::delete('/level/{id}', [LevelController::class, 'destroy']); // Untuk proses hapus data
+        });
+    });
+    

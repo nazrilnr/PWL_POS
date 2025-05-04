@@ -25,4 +25,12 @@ class UserModel extends Authenticatable
     {
         return $this->belongsTo(LevelModel::class, 'level_id', 'level_id');
     }
+
+    public function getRolename(): string{
+        return $this->level->level_nama;
+    }
+
+    public function hasRoled($role):bool {
+        return $this->level->level_kode == $role;
+    }
 }
