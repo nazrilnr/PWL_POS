@@ -32,23 +32,23 @@ Route::group(['prefix' => 'user'], function () {
     Route::delete('/{id}', [UserController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'level'], function () {
-    Route::get('/', [LevelController::class, 'index']);
-    Route::post('/list', [LevelController::class, 'list']);
-    Route::get('/create', [LevelController::class, 'create']);
-    Route::post('/', [LevelController::class, 'store']);
-    Route::get('/create_ajax', [LevelController::class, 'create_ajax']);
-    Route::post('/ajax', [LevelController::class, 'store_ajax']);
-    Route::get('/{id}', [LevelController::class, 'show']);
-    Route::get('/{id}/edit', [LevelController::class, 'edit']);
-    Route::put('/{id}', [LevelController::class, 'update']);
-    Route::get('/{id}/edit_ajax', [LevelController::class, 'edit_ajax']);
-    Route::put('/{id}/update_ajax', [LevelController::class, 'update_ajax']);
-    Route::get('/{id}/delete_ajax', [LevelController::class, 'confirm_ajax']);
-    Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax']);
-    Route::get('/{id}/show_ajax', [LevelController::class, 'show_ajax']);
-    Route::delete('/{id}', [LevelController::class, 'destroy']);
-});
+// Route::group(['prefix' => 'level'], function () {
+//     Route::get('/', [LevelController::class, 'index']);
+//     Route::post('/list', [LevelController::class, 'list']);
+//     Route::get('/create', [LevelController::class, 'create']);
+//     Route::post('/', [LevelController::class, 'store']);
+//     Route::get('/create_ajax', [LevelController::class, 'create_ajax']);
+//     Route::post('/ajax', [LevelController::class, 'store_ajax']);
+//     Route::get('/{id}', [LevelController::class, 'show']);
+//     Route::get('/{id}/edit', [LevelController::class, 'edit']);
+//     Route::put('/{id}', [LevelController::class, 'update']);
+//     Route::get('/{id}/edit_ajax', [LevelController::class, 'edit_ajax']);
+//     Route::put('/{id}/update_ajax', [LevelController::class, 'update_ajax']);
+//     Route::get('/{id}/delete_ajax', [LevelController::class, 'confirm_ajax']);
+//     Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax']);
+//     Route::get('/{id}/show_ajax', [LevelController::class, 'show_ajax']);
+//     Route::delete('/{id}', [LevelController::class, 'destroy']);
+// });
 
 Route::group(['prefix' => 'kategori'], function () {
     Route::get('/', [KategoriController::class, 'index']);
@@ -176,3 +176,14 @@ Route::group(['prefix' => 'penjualan-detail'], function () {
         });
     });
     
+    // artinya semua route di dalam group ini harus punya role ADM (Administrator) dan MNG (Manager)
+    Route::middleware(['authorize:ADM,MNG'])->group(function() {
+        Route::get('/barang', [BarangController::class, 'index']);
+        Route::post('/barang/list', [BarangController::class, 'list']);
+        Route::get('/barang/create_ajax', [BarangController::class, 'create_ajax']); // ajax form create
+        Route::post('/barang', [BarangController::class, 'store_ajax']); // ajax store
+        Route::get('/barang/{id}/edit_ajax', [BarangController::class, 'edit_ajax']); // ajax form edit
+        Route::put('/barang/{id}/update_ajax', [BarangController::class, 'update_ajax']); // ajax update
+        Route::get('/barang/{id}/delete_ajax', [BarangController::class, 'confirm_ajax']); // ajax form confirm
+        Route::delete('/barang/{id}/delete_ajax', [BarangController::class, 'delete_ajax']); // ajax delete
+    });
