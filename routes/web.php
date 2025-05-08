@@ -292,7 +292,7 @@ Route:: get ('/', [WelcomeController :: class,'index' ]);
         });
 
    //penjualan detail
-   Route::middleware(['authorize:STF'])->group(function () {
+   Route::middleware(['authorize:STF,ADM,MNG'])->group(function () {
         Route::group(['prefix' => 'penjualan-detail'], function () {
             Route::get('/', [PenjualanDetailController::class, 'index']);
             Route::post('/list', [PenjualanDetailController::class, 'list']);
