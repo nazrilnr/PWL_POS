@@ -65,7 +65,6 @@ public function postSignup(Request $req)
         'username' => 'required|string|min:5|max:20|unique:m_user,username',
         'nama' => 'required|string|min:5|max:100',
         'password' => 'required|string|min:6|confirmed',
-        'level_id' => 'required|in:1,2,3,4', // Ensure level_id is one of the valid options
     ]);
 
     if ($validator->fails()) {
@@ -78,7 +77,7 @@ public function postSignup(Request $req)
     $user = UserModel::create([
         'username' => $req->username,
         'nama' => $req->nama,
-        'level_id' => $req->level_id,  // Store the level_id from the form
+        'level_id' => 3, // Default: Staff
         'password' => Hash::make($req->password)
     ]);
 
@@ -89,5 +88,6 @@ public function postSignup(Request $req)
         'redirect' => url('/')
     ], Response::HTTP_OK);
 }
+
 
 }
