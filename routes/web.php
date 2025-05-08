@@ -150,14 +150,17 @@ Route:: get ('/', [WelcomeController :: class,'index' ]);
     // Validasi pola parameter 'id' agar hanya berupa angka
     Route::pattern('id', '[0-9]+');
 
-    // Route untuk login
-    Route::get('login', [AuthController::class, 'login'])->name('login');
-    Route::post('login', [AuthController::class, 'postlogin']);
-    Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
+    Route::controller(AuthController::class)->group(function () {
+        Route::get('login', 'login')->name('login');
+        Route::post('login', 'postLogin')->name('login.post');
+        Route::get('logout', 'logout')->middleware('auth')->name('logout');
+        Route::get('register', 'showSignup')->name('signup');
+        Route::post('register', 'postSignup')->name('signup.post');
+    });
 
     Route::middleware(['auth'])->group(function () {
     Route::get('/', [WelcomeController::class, 'index']);
-    Route::middleware(['authorize:ADM'])->group(function () {
+    Route::middleware(['authorize:ADM, MNG'])->group(function () {
         //user
         Route::group(['prefix' => 'user'], function () {
             Route::get('/', [UserController::class, 'index']);
@@ -181,7 +184,7 @@ Route:: get ('/', [WelcomeController :: class,'index' ]);
     
     // Level
     Route::prefix('level')
-        ->middleware(['authorize:ADM'])
+        ->middleware(['authorize:ADM, MNG'])
         ->controller(LevelController::class)
         ->group(function () {
             Route::get('/', 'index')->name('level.index');

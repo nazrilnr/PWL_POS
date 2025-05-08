@@ -2,27 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserModel;
+use App\Models\LevelModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    /**
-     * Tampilkan halaman login
-     */
     public function login()
     {
-        // Jika sudah login, redirect ke halaman utama
-        if (Auth::check()) {
+        if (Auth::check()) { // jika sudah login, maka redirect ke halaman home
             return redirect('/');
         }
-
         return view('auth.login');
     }
 
-    /**
-     * Proses login
-     */
     public function postlogin(Request $request)
     {
         if ($request->ajax() || $request->wantsJson()) {
@@ -33,6 +30,7 @@ class AuthController extends Controller
                     'status' => true,
                     'message' => 'Login Berhasil',
                     'redirect' => url('/')
+
                 ]);
             }
 
@@ -41,19 +39,55 @@ class AuthController extends Controller
                 'message' => 'Login Gagal'
             ]);
         }
-
         return redirect('login');
     }
 
-    /**
-     * Proses logout
-     */
     public function logout(Request $request)
     {
         Auth::logout();
+        
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
         return redirect('login');
     }
+
+    public function showSignup()
+    {
+        $levels = LevelModel::all();
+        return view('auth.register', compact('levels'));
+    }
+    
+
+// Controller (postSignup)
+public function postSignup(Request $req)
+{
+    $validator = Validator::make($req->all(), [
+        'username' => 'required|string|min:5|max:20|unique:m_user,username',
+        'nama' => 'required|string|min:5|max:100',
+        'password' => 'required|string|min:6|confirmed',
+        'level_id' => 'required|in:1,2,3,4', // Ensure level_id is one of the valid options
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'message' => 'Validasi Gagal',
+            'msgField' => $validator->errors()
+        ], Response::HTTP_BAD_REQUEST);
+    }
+
+    $user = UserModel::create([
+        'username' => $req->username,
+        'nama' => $req->nama,
+        'level_id' => $req->level_id,  // Store the level_id from the form
+        'password' => Hash::make($req->password)
+    ]);
+
+    Auth::login($user);
+
+    return response()->json([
+        'message' => 'Data pengguna berhasil dibuat',
+        'redirect' => url('/')
+    ], Response::HTTP_OK);
+}
+
 }
