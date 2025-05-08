@@ -155,20 +155,29 @@ Route:: get ('/', [WelcomeController :: class,'index' ]);
     Route::post('login', [AuthController::class, 'postlogin']);
     Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 
-    Route::middleware(['auth'])->group(function() {
-        // Artinya semua route di dalam group ini harus login dulu
-        Route::get('/', [WelcomeController::class, 'index']);
-        // Route Level - Artinya semua route di dalam group ini harus punya role ADM (Administrator)
-        Route::middleware(['authorize:ADM'])->group(function() {
-            Route::get('/level', [LevelController::class, 'index']);
-            Route::post('/level/list', [LevelController::class, 'list']); // Untuk list JSON datatables
-            Route::get('/level/create', [LevelController::class, 'create']);
-            Route::post('/level', [LevelController::class, 'store']);
-            Route::get('/level/{id}/edit', [LevelController::class, 'edit']); // Untuk tampilkan form edit
-            Route::put('/level/{id}', [LevelController::class, 'update']); // Untuk proses update data
-            Route::delete('/level/{id}', [LevelController::class, 'destroy']); // Untuk proses hapus data
+    Route::middleware(['auth'])->group(function () {
+    Route::get('/', [WelcomeController::class, 'index']);
+    Route::middleware(['authorize:ADM'])->group(function () {
+        //user
+        Route::group(['prefix' => 'user'], function () {
+            Route::get('/', [UserController::class, 'index']);
+            Route::post('/list', [UserController::class, 'list']);
+            Route::get('/create', [UserController::class, 'create']);
+            Route::post('/', [UserController::class, 'store']);
+            Route::get('/create_ajax', [UserController::class, 'create_ajax']);
+            Route::post('/ajax', [UserController::class, 'store_ajax']);
+            Route::get('/{id}', [UserController::class, 'show']);
+            Route::get('/{id}/edit', [UserController::class, 'edit']);
+            Route::put('/{id}', [UserController::class, 'update']);
+            Route::get('/{id}/edit_ajax', [UserController::class, 'edit_ajax']);
+            Route::put('/{id}/update_ajax', [UserController::class, 'update_ajax']);
+            Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_ajax']);
+            Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax']);
+            Route::delete('/{id}', [UserController::class, 'destroy']);
+            Route::get('/{id}/show_ajax', [UserController::class, 'show_ajax']);
         });
     });
+        });
     
     // Level
     Route::prefix('level')
