@@ -117,9 +117,10 @@ class BarangController extends Controller
             ->with('kategori');
     
         // FILTER KATEGORI
-        if ($request->kategori_id) {
-            $barangs->where('kategori_id', $request->kategori_id);
+       if ($request->filter_kategori) {
+          $barangs->where('kategori_id', $request->filter_kategori);
         }
+
     
         return DataTables::of($barangs)
             ->addIndexColumn()
