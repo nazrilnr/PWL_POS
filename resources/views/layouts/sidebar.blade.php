@@ -22,6 +22,14 @@
                 </a>
             </li>
 
+            <!-- Profil -->
+            <li class="nav-item">
+                <a href="{{ route('profile.index') }}" class="nav-link {{ $activeMenu == 'profile' ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-user"></i>
+                    <p>Profil Saya</p>
+                </a>
+            </li>
+
             <!-- Data Pengguna -->
             <li class="nav-header">Data Pengguna</li>
             <li class="nav-item">

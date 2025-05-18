@@ -37,4 +37,18 @@ class UserModel extends Authenticatable
     public function getRole(){
         return $this->level->level_kode;
     }
+
+    public function getProfilePictureUrl()
+    {
+        return $this->image
+            ? asset($this->image)
+            : asset('adminlte/dist/img/avatar.png');
+    } 
+
+    // protected function image(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn($image) => url($image)
+    //     );
+    // }
 }

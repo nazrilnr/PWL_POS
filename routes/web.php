@@ -10,6 +10,7 @@ use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\StokController;
 use App\Http\Controllers\PenjualanDetailController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileController;
 
 Route:: get ('/', [WelcomeController :: class,'index' ]);
 
@@ -314,4 +315,9 @@ Route:: get ('/', [WelcomeController :: class,'index' ]);
             Route::delete('/{id}', [PenjualanController::class, 'destroy']);
          });
     });
+
+    Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [UserController::class, 'profile'])->name('profile.index');
+    Route::post('/profile/update-picture', [UserController::class, 'updateProfilePicture']);
+});
 });
