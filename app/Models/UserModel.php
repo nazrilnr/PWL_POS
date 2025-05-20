@@ -8,6 +8,16 @@ use Illuminate\Foundation\Auth\User as Authenticatable; // implementasi class Au
 
 class UserModel extends Authenticatable
 {
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
     use HasFactory;
 
     protected $table = 'm_user';
@@ -26,15 +36,18 @@ class UserModel extends Authenticatable
         return $this->belongsTo(LevelModel::class, 'level_id', 'level_id');
     }
 
-    public function getRolename(): string{
+    public function getRolename(): string
+    {
         return $this->level->level_nama;
     }
 
-    public function hasRoled($role):bool {
+    public function hasRoled($role): bool
+    {
         return $this->level->level_kode == $role;
     }
 
-    public function getRole(){
+    public function getRole()
+    {
         return $this->level->level_kode;
     }
 
@@ -43,7 +56,7 @@ class UserModel extends Authenticatable
         return $this->image
             ? asset($this->image)
             : asset('adminlte/dist/img/avatar.png');
-    } 
+    }
 
     // protected function image(): Attribute
     // {
