@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\LoginController;
 Route::post('/register',RegisterController::class)->name('register');
 Route::post('/login', LoginController::class)->name('login');
 Route::middleware('auth:api')->post('/logout', App\Http\Controllers\Api\LogoutController::class)->name('logout');
+Route::post('/register1',RegisterController::class)->name('register1');
 
 
 use App\Http\Controllers\Api\LevelController;
