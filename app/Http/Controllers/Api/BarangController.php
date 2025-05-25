@@ -47,31 +47,65 @@ class BarangController extends Controller
     }
 
     public function destroy($id)
-{
-    try {
-        $barang = BarangModel::find($id);
-        
-        if (!$barang) {
+    {
+        try {
+            $barang = BarangModel::find($id);
+
+            if (!$barang) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Data barang tidak ditemukan'
+                ], 404);
+            }
+
+            $barang->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data barang berhasil dihapus'
+            ]);
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Data barang tidak ditemukan'
-            ], 404);
+                'message' => 'Gagal menghapus data barang',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function uploadImage(Request $req)
+    {
+        $validator = Validator::make($req->all(), [
+            'kategori_id' => 'required|integer',
+            'barang_kode' => 'required|string|max:50',
+            'barang_nama' => 'required|string|max:255',
+            'harga_beli' => 'required|numeric',
+            'harga_jual' => 'required|numeric',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
         }
 
-        $barang->delete();
+        $data = $req->all();
+
+        if ($req->hasFile('image')) {
+            $image = $req->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('uploads/barang'), $imageName);
+            $data['image'] = 'uploads/barang/' . $imageName;
+        }
+
+        $barang = BarangModel::create($data);
 
         return response()->json([
             'success' => true,
-            'message' => 'Data barang berhasil dihapus'
-        ]);
-
-    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Gagal menghapus data barang',
-            'error' => $e->getMessage()
-        ], 500);
+            'message' => 'Barang dengan gambar berhasil ditambahkan',
+            'data' => $barang
+        ], Response::HTTP_CREATED);
     }
-}
-
 }
